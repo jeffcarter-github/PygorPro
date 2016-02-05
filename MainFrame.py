@@ -19,7 +19,6 @@ class MainFrame(wx.Frame):
         self.history_frame.log_new_project()
 
         self.dataFrame_selection = None
-        self.create_plot_window()
 
     def create_menu_bar(self):
         menu_bar = wx.MenuBar()
@@ -29,44 +28,65 @@ class MainFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.on_exit_option, exit_option)
 
         file_menu = wx.Menu()
-        new_option = file_menu.Append(wx.ID_ANY, '&New Project', 'Create New Project')
+        new_option = file_menu.Append(wx.ID_NEW, '&New Project', 'Create New Project')
         self.Bind(wx.EVT_MENU, self.on_new_option, new_option)
-        open_option = file_menu.Append(wx.ID_ANY, '&Open...', 'Open Existing Project')
+        open_option = file_menu.Append(wx.ID_OPEN, '&Open...', 'Open Existing Project')
         self.Bind(wx.EVT_MENU, self.on_open_option, open_option)
-        save_option = file_menu.Append(wx.ID_ANY, '&Save...', 'Save Project to File')
+        save_option = file_menu.Append(wx.ID_SAVE, '&Save...', 'Save Project to File')
         self.Bind(wx.EVT_MENU, self.on_save_option, save_option)
         save_as_option = file_menu.Append(wx.ID_ANY, '&Save As...', 'Save Project As')
         self.Bind(wx.EVT_MENU, self.on_save_as_option, save_as_option)
 
-        data_menu = wx.Menu()
-        load_dataFrame_option = data_menu.Append(wx.ID_ANY, '&Load DataFrame', 'Load Existing DataFrame')
+        load_menu = wx.Menu()
+        load_dataFrame_option = load_menu.Append(wx.ID_ANY, '&Load DataFrame...', 'Load Existing DataFrame')
         self.Bind(wx.EVT_MENU, self.on_load_dataFrame, load_dataFrame_option)
-        load_binary_option = data_menu.Append(wx.ID_ANY, '&Load Binary Data', 'Load Binary Data into DataFrame')
+        load_binary_option = load_menu.Append(wx.ID_ANY, '&Load Binary Data...', 'Load Binary Data into DataFrame')
         self.Bind(wx.EVT_MENU, self.on_load_binary, load_binary_option)
-        load_text_option = data_menu.Append(wx.ID_ANY, '&Load Text File', 'Load Text File into DataFrame')
+        load_text_option = load_menu.Append(wx.ID_ANY, '&Load Text File...', 'Load Text File into DataFrame')
         self.Bind(wx.EVT_MENU, self.on_load_text, load_text_option)
-        load_csv_option = data_menu.Append(wx.ID_ANY, '&Load CSV File', 'Load Text File into DataFrame')
+        load_csv_option = load_menu.Append(wx.ID_ANY, '&Load CSV File...', 'Load Text File into DataFrame')
         self.Bind(wx.EVT_MENU, self.on_load_csv, load_csv_option)
-        load_delete_option = data_menu.Append(wx.ID_ANY, '&Delete Loaded Data', 'Delete DataFrame from Project')
+        
+        data_menu = wx.Menu()
+        load_option = data_menu.AppendMenu(wx.ID_ANY, '&Load DataFrame', load_menu)
+        data_menu.AppendSeparator()
+        select_option = data_menu.Append(wx.ID_ANY, '&Select DataFrame...', 'Select DataFrame to make active')
+        self.Bind(wx.EVT_MENU, self.on_activate_data, select_option)
+        load_delete_option = data_menu.Append(wx.ID_ANY, '&Delete DataFrame...', 'Delete DataFrame from Project')
         self.Bind(wx.EVT_MENU, self.on_delete_data, load_delete_option)
-        load_select_option = data_menu.Append(wx.ID_ANY, '&Select DataFrame', 'Select DataFrame to make active')
-        self.Bind(wx.EVT_MENU, self.on_activate_data, load_select_option)
 
+        new_3D_plot_menu = wx.Menu()
 
-        table_menu = wx.Menu()
-        create_table_option = table_menu.Append(wx.ID_ANY, '&Create Table', 'Create Table from DataFrame')
+        new_window_menu = wx.Menu()
+        create_table_option = new_window_menu.Append(wx.ID_ANY, '&Create Table...', 'Create Table from DataFrame')
         self.Bind(wx.EVT_MENU, self.on_create_table_option, create_table_option)
+        create_2D_plot_option = new_window_menu.Append(wx.ID_ANY, '&Create 2D Plot...', 'Create an Interactive Plot')
+        self.Bind(wx.EVT_MENU, self.on_create_2D_plot_option, create_2D_plot_option)
+        create_3D_plot_option = new_window_menu.AppendMenu(wx.ID_ANY, '&Create 3D Plot...', new_3D_plot_menu)
+        new_window_menu.AppendSeparator()
+        export_graph_option = new_window_menu.Append(wx.ID_ANY, '&Export Plot...', 'Export Plot to File')
+        self.Bind(wx.EVT_MENU, self.on_export_graph, export_graph_option)
 
-        plot_menu = wx.Menu()
-        create_plot_option = plot_menu.Append(wx.ID_ANY, '&Plot Data', 'Create an interactive plot')
-        self.Bind(wx.EVT_MENU, self.on_create_plot_option, create_plot_option)
+        quick_fit_menu = wx.Menu()
+        stats_menu = wx.Menu()
+
+        analysis_menu = wx.Menu()
+        curve_fitting_option = analysis_menu.Append(wx.ID_ANY, '&Curve Fitting...', 'Curve Fitting')
+        self.Bind(wx.EVT_MENU, self.on_curve_fitting, curve_fitting_option)
+        analysis_menu.AppendMenu(wx.ID_ANY, '&Quick Curve Fitting...', quick_fit_menu)
+        analysis_menu.AppendSeparator()
+        correlate_option = analysis_menu.Append(wx.ID_ANY, '&Correlate...', 'Correlation Menu')
+        self.Bind(wx.EVT_MENU, self.on_correlate, correlate_option)
+        descriptive_statistics_option = analysis_menu.Append(wx.ID_ANY, '&Descriptive Statistics...', 'Descriptive Statistics')
+        self.Bind(wx.EVT_MENU, self.on_describe, descriptive_statistics_option)
+        analysis_menu.AppendMenu(wx.ID_ANY, '&Statistics', stats_menu)
+
 
         menu_bar.Append(app_menu, '&PygorPro')
         menu_bar.Append(file_menu, '&Project')
         menu_bar.Append(data_menu, '&DataFrame')
-        menu_bar.Append(table_menu, '&Table')
-        menu_bar.Append(plot_menu, '&Plot')
-        #menu_bar.Append(analysis_menu, '&Analysis')
+        menu_bar.Append(new_window_menu, '&Window')
+        menu_bar.Append(analysis_menu, '&Analysis')
 
         self.SetMenuBar(menu_bar)
 
@@ -131,16 +151,28 @@ class MainFrame(wx.Frame):
         table = Table(self, self.current_project
                                 .get_dataFrame(current_dataFrame))
 
-    def on_create_plot_option(self, event):
-        self.create_plot_window()
+    def on_create_2D_plot_option(self, event):
+        self.create_2D_plot_window()
 
-    def create_plot_window(self):
+    def create_2D_plot_window(self):
         import numpy as np
         x = np.random.random(50)
         y = np.random.random(50)
         next_index = len(self.current_project.project_figures)
         self.current_project.add_figure_to_project(
             Plot(next_index, x, y, 'x stuff', 'y_stuff'))
+
+    def on_export_graph(self, event):
+        pass
+
+    def on_curve_fitting(self, event):
+        pass
+
+    def on_correlate(self, event):
+        pass
+
+    def on_describe(self, event):
+        pass
 
     def report_statistics(self, dataFrame_name, dataSeries_name):
         dataSeries = self.current_project\
