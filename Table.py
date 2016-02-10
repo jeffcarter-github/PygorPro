@@ -33,6 +33,9 @@ class Table(wx.Frame):
 
         self.Show(True)
 
+    def __del__(self):
+        print self.parent.current_project.remove_table_from_project(self.name)
+
     def set_label(self, pos, label):
         self.data_table.SetColLabelValue(pos, label)
 

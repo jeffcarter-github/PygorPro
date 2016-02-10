@@ -685,7 +685,7 @@ class GUI_Curve_Fitting (wx.Frame):
         self.m_staticText37.Wrap(-1)
         bSizer73.Add(self.m_staticText37, 0, wx.ALL, 5)
         
-        self.m_textCtrl26 = wx.TextCtrl(self.m_panel211, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(-1,75), wx.HSCROLL | wx.TE_READONLY | wx.TE_WORDWRAP)
+        self.m_textCtrl26 = wx.TextCtrl(self.m_panel211, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(-1, 75), wx.HSCROLL | wx.TE_READONLY | wx.TE_WORDWRAP)
         self.m_textCtrl26.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
         
         bSizer73.Add(self.m_textCtrl26, 1, wx.ALL | wx.EXPAND, 5)

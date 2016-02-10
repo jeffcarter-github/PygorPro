@@ -31,6 +31,9 @@ class Project():
         key = new_table.name
         self.project_tables[key] = new_table
 
+    def remove_table_from_project(self, closed_table):
+        print 'table removed...%s' % closed_table.name
+
     def add_figure_to_project(self, new_figure):
         self.project_figures[new_figure.plot_index] = new_figure
 

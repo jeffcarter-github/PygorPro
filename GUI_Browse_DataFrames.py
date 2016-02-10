@@ -1,9 +1,9 @@
 import wx
 
 
-class GUI_Browse_DataFrames (wx.Frame):
+class GUI_Browse_DataFrames(wx.Frame):
     def __init__(self, parent):
-        wx.Frame.__init__ (self, parent, id=wx.ID_ANY, title=u"DataFrame Browser", pos=wx.DefaultPosition, size=wx.Size(400,215), style=wx.CAPTION | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
+        wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=u"DataFrame Browser", pos=wx.DefaultPosition, size=wx.Size(400,215), style=wx.CAPTION | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
 
         self.SetSizeHintsSz(wx.DefaultSize, wx.DefaultSize)
         self.SetBackgroundColour(wx.Colour(219, 219, 219))
@@ -67,6 +67,20 @@ class GUI_Browse_DataFrames (wx.Frame):
         self.delete_button.Bind(wx.EVT_BUTTON, self.on_delete)
         self.panel_ok_cancel_sizerCancel.Bind(wx.EVT_BUTTON, self.on_cancel_click)
         self.panel_ok_cancel_sizerOK.Bind(wx.EVT_BUTTON, self.on_ok_click)
+    
+    def __del__( self ):
+        pass
+    
+    
+    # Virtual event handlers, overide them in your derived class
+    def prepare_to_delete_selections( self, event ):
+        pass
+    
+    def ok_cancel( self, event ):
+        pass
+    
+    def on_ok( self, event ):
+        pass
 
     def __del__(self):
         pass
