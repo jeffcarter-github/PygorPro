@@ -9,12 +9,12 @@ class DataSelectionForTable(GUI_SelectDataFrameForTable):
 
         self.names = dataFrame_names
         self.call_back_func = call_back_func
+        self.selections = None
 
     def ok_cancel(self, event):
         self.Destroy()
 
     def on_ok(self, event):
-        selections = [self.dataFrame_ListBox.GetString(idx) for idx in self.dataFrame_ListBox.GetSelections()]
-        print selections
-        self.call_back_func(selections)
+        self.selections = [self.dataFrame_ListBox.GetString(idx) for idx in self.dataFrame_ListBox.GetSelections()]
+        self.call_back_func(self.selections)
         self.Destroy()

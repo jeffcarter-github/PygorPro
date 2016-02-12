@@ -34,7 +34,8 @@ class Table(wx.Frame):
         self.Show(True)
 
     def __del__(self):
-        print self.parent.current_project.remove_table_from_project(self.name)
+        self.parent.current_project.remove_table(self.name)
+        self.parent.history_frame.log_delete_table(self.name)
 
     def set_label(self, pos, label):
         self.data_table.SetColLabelValue(pos, label)
@@ -54,4 +55,4 @@ class Table(wx.Frame):
         column_selection = event.GetCol()
         if column_selection is not None:
             column_name = self.get_label(column_selection)
-            self.parent.report_statistics(self.name, column_name)
+            # do something with statistics here...

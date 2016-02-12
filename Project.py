@@ -22,19 +22,25 @@ class Project():
     def save_as_project(self):
         self.previously_saved = True
 
-    def add_dataFrame_to_project(self, new_dataFrame):
+    def add_dataFrame(self, new_dataFrame):
         key = new_dataFrame.name
         if key not in self.project_dataFrames.keys():
             self.project_dataFrames[key] = new_dataFrame
+            return True
+        else:
+            return False
 
-    def add_table_to_project(self, new_table):
+    def remove_dataFrame(self, dataFrame_name):
+        self.project_dataFrames.pop(dataFrame_name)
+
+    def add_table(self, new_table):
         key = new_table.name
         self.project_tables[key] = new_table
 
-    def remove_table_from_project(self, closed_table):
-        print 'table removed...%s' % closed_table.name
+    def remove_table(self, table_name):
+        self.project_tables.pop(table_name)
 
-    def add_figure_to_project(self, new_figure):
+    def add_figure(self, new_figure):
         self.project_figures[new_figure.plot_index] = new_figure
 
     def get_dataFrame_names(self):
@@ -42,6 +48,11 @@ class Project():
 
     def get_dataFrame(self, name):
         return self.project_dataFrames[name]
+
+    def get_series_names(self, name):
+        print 'get_series_names:'
+        print name, type(self.get_dataFrame(name))
+        return self.get_dataFrame(name).get_keys()
 
     def get_table_names(self):
         return self.project_tables.keys()

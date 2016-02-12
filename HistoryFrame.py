@@ -15,6 +15,10 @@ class HistoryFrame(wx.Frame):
 
         self.Show(True)
 
+    def log_message(self, message):
+        message += '\n'
+        self.log_window.WriteText(message)
+
     def welcome(self):
         message = 'Welcome to PygorPro...'
         self.log_message(message)
@@ -22,16 +26,20 @@ class HistoryFrame(wx.Frame):
     def log_new_project(self):
         self.log_message('New untitled project created...')
 
+    def log_project_saved(self, project_name, file_path):
+        self.log_message('%s has been saved...\t%s' % (project_name, file_path))
+
     def log_new_dataFrame(self, dataFrame_path):
-        self.log_message('New dataFrame open from:')
-        self.log_message('...' + dataFrame_path)
+        self.log_message('New dataFrame open...\t%s' % dataFrame_path)
 
-    def log_message(self, message):
-        message += '\n'
-        self.log_window.WriteText(message)
+    def log_already_exists(self, dataFrame_path):
+        self.log_message('...dataFrame already exists in project...%s' % dataFrame_path)
 
-    def log_dictionary(self, series, dictionary):
-        self.log_message('Data Series: ' + series)
-        for key in dictionary.keys():
-            message = '\t%s\t\t %12.8f' % (str(key), dictionary[key])
-            self.log_message(message)
+    def log_new_table(self, table_name):
+        self.log_message('New table created in project...\t%s' % table_name)
+
+    def log_delete_table(self, table_name):
+        self.log_message('Table deleted from project...\t%s' % table_name)
+
+    def log_delete_dataFrame(self, dataFrame_name):
+        self.log_message('DataFrame deleted from project...\t%s' % dataFrame_name)

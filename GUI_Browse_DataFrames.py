@@ -2,8 +2,8 @@ import wx
 
 
 class GUI_Browse_DataFrames(wx.Frame):
-    def __init__(self, parent):
-        wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=u"DataFrame Browser", pos=wx.DefaultPosition, size=wx.Size(400,215), style=wx.CAPTION | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
+    def __init__(self, dataFrame_lst):
+        wx.Frame.__init__(self, None, id=wx.ID_ANY, title=u"DataFrame Browser", size=wx.Size(400, 325), style=wx.CAPTION  |  wx.FRAME_FLOAT_ON_PARENT  |  wx.TAB_TRAVERSAL)
 
         self.SetSizeHintsSz(wx.DefaultSize, wx.DefaultSize)
         self.SetBackgroundColour(wx.Colour(219, 219, 219))
@@ -23,8 +23,8 @@ class GUI_Browse_DataFrames(wx.Frame):
         self.loaded_frames_StaticText.Wrap(-1)
         sub_panel_sizer_v1.Add(self.loaded_frames_StaticText, 0, wx.ALL, 5)
 
-        dataFrame_ListBoxChoices = []
-        self.dataFrame_ListBox = wx.ListBox(self.main_panel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, dataFrame_ListBoxChoices, wx.LB_EXTENDED | wx.LB_HSCROLL | wx.LB_SORT)
+        dataFrame_ListBoxChoices = dataFrame_lst
+        self.dataFrame_ListBox = wx.ListBox(self.main_panel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, dataFrame_ListBoxChoices, wx.LB_EXTENDED | wx.LB_HSCROLL | wx.LB_NEEDED_SB | wx.LB_SORT)
         self.dataFrame_ListBox.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DLIGHT))
 
         sub_panel_sizer_v1.Add(self.dataFrame_ListBox, 0, wx.ALL | wx.EXPAND, 5)
@@ -35,14 +35,24 @@ class GUI_Browse_DataFrames(wx.Frame):
 
         sub_panel_sizer_h2 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.delete_StaticTxt = wx.StaticText(self.main_panel, wx.ID_ANY, u"Delete Selected DataFrame(s): ", wx.DefaultPosition, wx.DefaultSize, 0)
-        self.delete_StaticTxt.Wrap(-1)
-        sub_panel_sizer_h2.Add(self.delete_StaticTxt, 0, wx.ALL, 5)
+        self.delete_button = wx.Button(self.main_panel, wx.ID_ANY, u"Add to List for Deletion...", wx.DefaultPosition, wx.DefaultSize, 0)
+        sub_panel_sizer_h2.Add(self.delete_button, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 5)
 
-        self.delete_button = wx.Button(self.main_panel, wx.ID_ANY, u"Delete", wx.DefaultPosition, wx.DefaultSize, 0)
-        sub_panel_sizer_h2.Add(self.delete_button, 0, wx.ALL, 5)
+        main_panel_sizer.Add(sub_panel_sizer_h2, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 5)
 
-        main_panel_sizer.Add(sub_panel_sizer_h2, 0, wx.ALL | wx.EXPAND, 5)
+        bSizer117 = wx.BoxSizer(wx.VERTICAL)
+
+        self.m_staticText54 = wx.StaticText(self.main_panel, wx.ID_ANY, u"List for Deletion: ", wx.DefaultPosition, wx.DefaultSize, 0)
+        self.m_staticText54.Wrap(-1)
+        bSizer117.Add(self.m_staticText54, 0, wx.ALL, 5)
+
+        list_for_deletionChoices = []
+        self.list_for_deletion = wx.ListBox(self.main_panel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, list_for_deletionChoices, wx.LB_HSCROLL | wx.LB_NEEDED_SB)
+        self.list_for_deletion.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DLIGHT))
+
+        bSizer117.Add(self.list_for_deletion, 0, wx.ALL | wx.EXPAND, 5)
+
+        main_panel_sizer.Add(bSizer117, 0, wx.EXPAND, 5)
 
         panel_ok_cancel_sizer = wx.StdDialogButtonSizer()
         self.panel_ok_cancel_sizerOK = wx.Button(self.main_panel, wx.ID_OK)
@@ -62,33 +72,14 @@ class GUI_Browse_DataFrames(wx.Frame):
 
         self.Centre(wx.BOTH)
 
-        # Connect Events
-        self.dataFrame_ListBox.Bind(wx.EVT_LISTBOX, self.add_selections_to_delete_list)
-        self.delete_button.Bind(wx.EVT_BUTTON, self.on_delete)
+        self.delete_button.Bind(wx.EVT_BUTTON, self.on_add_to_list)
         self.panel_ok_cancel_sizerCancel.Bind(wx.EVT_BUTTON, self.on_cancel_click)
         self.panel_ok_cancel_sizerOK.Bind(wx.EVT_BUTTON, self.on_ok_click)
-    
-    def __del__( self ):
-        pass
-    
-    
+
+        self.Show(True)
+
     # Virtual event handlers, overide them in your derived class
-    def prepare_to_delete_selections( self, event ):
-        pass
-    
-    def ok_cancel( self, event ):
-        pass
-    
-    def on_ok( self, event ):
-        pass
-
-    def __del__(self):
-        pass
-
-    def add_selections_to_delete_list(self, event):
-        pass
-
-    def on_delete(self, event):
+    def on_add_to_list(self, event):
         pass
 
     def on_cancel_click(self, event):

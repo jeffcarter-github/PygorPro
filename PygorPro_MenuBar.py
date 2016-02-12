@@ -1,8 +1,11 @@
 import wx
 
+from BrowseDataFrames import BrowseDataFrames
 from DataFrame import DataFrame
 from DataSelectionForTable import DataSelectionForTable
+from DataSelectionForPlot import DataSelectionForPlot
 from GUI_PygorPro_MenuBar import GUI_PygorPro_MenuBar
+from ChangeSeries import ChangeSeries
 from Table import Table
 
 
@@ -32,8 +35,10 @@ class PygorPro_MenuBar(GUI_PygorPro_MenuBar):
             new_dataFrame = DataFrame()
             new_dataFrame.from_csv(csv_file_path)
 
-            self.parent.current_project.add_dataFrame_to_project(new_dataFrame)
-            self.parent.history_frame.log_new_dataFrame(new_dataFrame.source)
+            if self.parent.project.add_dataFrame(new_dataFrame):
+                self.parent.history.log_new_dataFrame(new_dataFrame.source)
+            else:
+                self.parent.history.log_already_exists(new_dataFrame.source)
 
     def on_load_txt(self, event):
         pass
@@ -45,10 +50,14 @@ class PygorPro_MenuBar(GUI_PygorPro_MenuBar):
         pass
 
     def on_browse_dataFrames(self, event):
-        pass
+        dataFrame_lst = self.parent.project.get_dataFrame_names()
+        if dataFrame_lst != []:
+            dlg = BrowseDataFrames(dataFrame_lst, self.delete_dataFrames)
 
     def on_change_dataSeries_type(self, event):
-        pass
+        dataFrame_lst = self.parent.project.get_dataFrame_names()
+        if dataFrame_lst != []:
+            dlg = ChangeSeries(dataFrame_lst)
 
     def on_rename_dataSeries(self, event):
         pass
@@ -126,7 +135,10 @@ class PygorPro_MenuBar(GUI_PygorPro_MenuBar):
         pass
 
     def on_create_new_2D_plot(self, event):
-        pass
+        current_dataFrame_names =\
+            self.parent.project.get_dataFrame_names()
+        if current_dataFrame_names != []:
+            dlg = DataSelectionForPlot(self.parent, current_dataFrame_names)
 
     def on_create_new_3D_plot(self, event):
         pass
@@ -136,14 +148,16 @@ class PygorPro_MenuBar(GUI_PygorPro_MenuBar):
 
     def on_create_table(self, event):
         # get list of current dataFrames for current project
-        current_dataFrame_names = self.parent.current_project.get_dataFrame_names()
+        current_dataFrame_names =\
+            self.parent.project.get_dataFrame_names()
         if current_dataFrame_names != []:
             # if only one dataFrame is loaded, create table without dialog box
             if len(current_dataFrame_names) == 1:
                 self.create_tables(current_dataFrame_names)
             # else, open dialog gui for dataFrame selection
             else:
-                data_selection = DataSelectionForTable(self, current_dataFrame_names, self.create_tables)
+                data_selection =\
+                    DataSelectionForTable(self, current_dataFrame_names, self.create_tables)
 
     def on_append_dataSeries_to_table(self, event):
         pass
@@ -157,6 +171,14 @@ class PygorPro_MenuBar(GUI_PygorPro_MenuBar):
     def create_tables(self, lst_of_dataFrames):
         for dataFrame in lst_of_dataFrames:
             # create table object
-            table = Table(self.parent, self.parent.current_project.get_dataFrame(dataFrame))
+            table = Table(self.parent, self.parent.project.get_dataFrame(dataFrame))
             # add table object to project table dictionary
-            self.parent.current_project.add_table_to_project(table)
+            self.parent.project.add_table(table)
+            # report process to history bar
+            self.parent.history.log_new_table(table.name)
+
+    def delete_dataFrames(self, lst_of_dataFrame_names):
+        for dataFrame_name in lst_of_dataFrame_names:
+            # remove from project dataFrame list
+            self.parent.project.remove_dataFrame(dataFrame_name)
+            self.parent.history.log_delete_dataFrame(dataFrame_name)
