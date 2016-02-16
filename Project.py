@@ -31,11 +31,16 @@ class Project():
             return False
 
     def remove_dataFrame(self, dataFrame_name):
+        # NEED TO ADD A CHECK FOR THAT DATA IN TABLE OR PLOT...
         self.project_dataFrames.pop(dataFrame_name)
 
     def add_table(self, new_table):
         key = new_table.name
-        self.project_tables[key] = new_table
+        if key not in self.project_tables.keys():
+            self.project_tables[key] = new_table
+            return True
+        else:
+            return False
 
     def remove_table(self, table_name):
         self.project_tables.pop(table_name)
@@ -49,9 +54,10 @@ class Project():
     def get_dataFrame(self, name):
         return self.project_dataFrames[name]
 
+    def get_series(self, dataFrame_name, series_name):
+        return self.project_dataFrames[dataFrame_name].get_series(series_name)
+
     def get_series_names(self, name):
-        print 'get_series_names:'
-        print name, type(self.get_dataFrame(name))
         return self.get_dataFrame(name).get_keys()
 
     def get_table_names(self):
@@ -61,6 +67,9 @@ class Project():
         if print_flag:
             print self.project_figures
         return self.project_figures
+
+    def get_next_figure_index(self):
+        return len(self.project_figures)
 
     def set_active(self, selected_object):
         if isinstantance(selected_object, pd.core.frame.DataFrame):

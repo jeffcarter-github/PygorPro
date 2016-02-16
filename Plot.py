@@ -5,13 +5,21 @@ import numpy as np
 
 
 class Plot(wx.Frame):
-    def __init__(self, index, x, y, label_x, label_y):
-        wx.Frame.__init__(self, None, title='Plot: ' + str(index), pos=(200, 100), size=(500, 500))
+    '''Plot Class generates Plots... Input: index (int) and data_set (dic).
+    data_set is a dictionary with the following keys: x_data, y_data, x_axis,
+    y_axis, x_label, y_label, title, style'''
+    def __init__(self, index, data_set):
+        if data_set['title'] is '':
+            self.title = 'Plot: ' + str(index)
+        else:
+            self.title = data_set['title']
+
+        wx.Frame.__init__(self, None, title=self.title, pos=(200, 100), size=(500, 500))
 
         self.plot_index = index
-        self.x = x
-        self.y = y
-        self.max_idx = len(x)-1
+        self.x = data_set['x_data']
+        self.y = data_set['y_data']
+        self.max_idx = len(self.x)-1
 
         self.selection = None
         self.selection_object = None
@@ -20,8 +28,13 @@ class Plot(wx.Frame):
         self.x_extrema = (min(self.x), max(self.x))
         self.y_extrema = (min(self.y), max(self.y))
 
-        self.label_x = label_x
-        self.label_y = label_y
+        self.label_x = data_set['x_label']
+        self.label_y = data_set['y_label']
+
+        if data_set['style'] == 'Line':
+            self.style = 'b'
+        elif data_set['style'] == 'Scatter':
+            self.style = 'bo'
 
         self.canvas = None
         self.cid = None
@@ -45,7 +58,7 @@ class Plot(wx.Frame):
     def generate_plot(self):
         self.fig = plt.figure(dpi=100, facecolor='white', frameon=True)
         self.axes = self.fig.add_subplot(111)
-        self.axes.plot(self.x, self.y)
+        self.axes.plot(self.x, self.y, self.style)
         self.axes.set_xlabel(self.label_x, size=self.font_size)
         self.axes.set_ylabel(self.label_y, size=self.font_size)
         self.axes.tick_params(axis='both', which='major', labelsize=self.font_size)

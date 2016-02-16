@@ -147,10 +147,10 @@ class GUI_Selection_Plot(wx.Frame):
         self.plot_style_StaticTxt.Wrap( -1 )
         bSizer128.Add( self.plot_style_StaticTxt, 0, wx.ALL, 5 )
         
-        plot_style_TxtCtrlChoices = [ u"Line", u"Scatter" ]
-        self.plot_style_TxtCtrl = wx.Choice( self.main_panel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, plot_style_TxtCtrlChoices, 0 )
-        self.plot_style_TxtCtrl.SetSelection( 0 )
-        bSizer128.Add( self.plot_style_TxtCtrl, 0, wx.ALL, 5 )
+        plot_style_ChoiceBoxChoices = [ u"Line", u"Scatter" ]
+        self.plot_style_ChoiceBox = wx.Choice( self.main_panel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, plot_style_ChoiceBoxChoices, 0 )
+        self.plot_style_ChoiceBox.SetSelection( 0 )
+        bSizer128.Add( self.plot_style_ChoiceBox, 0, wx.ALL, 5 )
         
         plot_options_sizer.Add( bSizer128, 1, wx.EXPAND, 5 )
         
@@ -164,6 +164,10 @@ class GUI_Selection_Plot(wx.Frame):
         
         self.dialog_TxtCtrl = wx.TextCtrl( self.main_panel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,100 ), wx.HSCROLL|wx.TE_READONLY|wx.VSCROLL )
         self.dialog_TxtCtrl.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+        
+        font = wx.Font(8, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True)
+        self.dialog_TxtCtrl.SetFont(font)
+
         
         dialog_box_sizer.Add( self.dialog_TxtCtrl, 0, wx.ALL|wx.EXPAND, 5 )
         
@@ -201,7 +205,7 @@ class GUI_Selection_Plot(wx.Frame):
         self.y_axis_ChoiceBox.Bind(wx.EVT_CHOICE, self.on_choice_y_axis_position)
         self.x_axis_ChoiceBox.Bind(wx.EVT_CHOICE, self.on_choice_x_axis_position)
         self.add_button.Bind(wx.EVT_BUTTON, self.on_add_series_pair)
-        self.plot_style_TxtCtrl.Bind(wx.EVT_CHOICE, self.on_choice_plot_style)
+        self.plot_style_ChoiceBox.Bind(wx.EVT_CHOICE, self.on_choice_plot_style)
         self.button_sub_sizerCancel.Bind(wx.EVT_BUTTON, self.on_click_Cancel)
         self.button_sub_sizerOK.Bind(wx.EVT_BUTTON, self.on_click_OK)
 

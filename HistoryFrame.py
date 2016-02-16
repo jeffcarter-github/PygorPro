@@ -1,5 +1,5 @@
 import wx
-
+from DataFrame import DataFrame
 
 class HistoryFrame(wx.Frame):
     def __init__(self, parent):
@@ -32,8 +32,10 @@ class HistoryFrame(wx.Frame):
     def log_new_dataFrame(self, dataFrame_path):
         self.log_message('New dataFrame open...\t%s' % dataFrame_path)
 
-    def log_already_exists(self, dataFrame_path):
-        self.log_message('...dataFrame already exists in project...%s' % dataFrame_path)
+    def log_already_exists(self, project_object):
+        if isinstance(project_object, DataFrame):
+            self.log_message('...dataFrame already exists in project...%s' % dataFrame_path)
+
 
     def log_new_table(self, table_name):
         self.log_message('New table created in project...\t%s' % table_name)

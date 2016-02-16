@@ -7,6 +7,7 @@ from DataSelectionForPlot import DataSelectionForPlot
 from GUI_PygorPro_MenuBar import GUI_PygorPro_MenuBar
 from ChangeSeries import ChangeSeries
 from Table import Table
+from Plot import Plot
 
 
 class PygorPro_MenuBar(GUI_PygorPro_MenuBar):
@@ -138,7 +139,19 @@ class PygorPro_MenuBar(GUI_PygorPro_MenuBar):
         current_dataFrame_names =\
             self.parent.project.get_dataFrame_names()
         if current_dataFrame_names != []:
-            dlg = DataSelectionForPlot(self.parent, current_dataFrame_names)
+            dlg =\
+                DataSelectionForPlot(self.parent,
+                                     current_dataFrame_names,
+                                     self.generate_2D_plots)
+
+    def generate_2D_plots(self, data_dictionary):
+        '''callback function... data_dictionary is a dictionary of
+        data_set dictionaries. The data_set keys are x_dataFrame,
+        y_dataFrame, x_series, y_series, x_axis, y_axis, title, style...'''
+        for key in data_dictionary:
+            idx = self.parent.project.get_next_figure_index()
+            self.parent.project.add_figure(
+                Plot(idx, data_dictionary[key]))
 
     def on_create_new_3D_plot(self, event):
         pass
@@ -173,9 +186,12 @@ class PygorPro_MenuBar(GUI_PygorPro_MenuBar):
             # create table object
             table = Table(self.parent, self.parent.project.get_dataFrame(dataFrame))
             # add table object to project table dictionary
-            self.parent.project.add_table(table)
-            # report process to history bar
-            self.parent.history.log_new_table(table.name)
+            if self.parent.project.add_table(table):
+                # report process to history bar
+                self.parent.history.log_new_table(table.name)
+            else:
+                # ADD LOG FAILURE...
+                pass
 
     def delete_dataFrames(self, lst_of_dataFrame_names):
         for dataFrame_name in lst_of_dataFrame_names:
